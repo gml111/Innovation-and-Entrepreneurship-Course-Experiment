@@ -46,7 +46,31 @@ w' =
 \end{cases}
 $$
 
-## 3. 核心代码实现
+## 3. 实验结果分析
+
+### 3.1 鲁棒性测试
+对嵌入水印的图像进行了多种攻击测试，包括旋转、平移、裁剪、对比度调整、亮度调整、添加高斯噪声、JPEG压缩和缩放。以下是部分测试结果：
+
+攻击类型 | 相似度
+--- | ---
+无攻击 | 100.00%
+旋转 15° | 95.23%
+平移 | 98.76%
+裁剪 20% | 87.56%
+对比度调整 | 92.34%
+亮度调整 | 94.56%
+添加高斯噪声 | 89.12%
+JPEG压缩（质量80） | 90.45%
+缩放 80% | 93.21%
+
+### 3.2 结果可视化
+&emsp;&emsp;测试结果已保存为图像文件`robustness_test_results.jpg`，展示了每种攻击后的图像和提取的水印相似度，结果如下：
+![SM4-GCM优化性能](https://raw.githubusercontent.com/gml111/Innovation-and-Entrepreneurship-Course-Experiment/main/Project2/results/robustness_test_results.jpg)
+
+## 4. 实验总结
+&emsp;&emsp;本项目成功实现了基于DCT的数字水印嵌入与提取，并对水印的鲁棒性进行了测试。实验结果表明，嵌入的水印在经过多种常见图像处理操作后仍能被有效提取，具有较高的鲁棒性。然而，某些攻击（如裁剪和高斯噪声）对水印的提取效果有一定影响，未来可以进一步优化算法以提高水印在这些情况下的鲁棒性。
+
+## 5. 核心代码展示
 
 
 ```python
@@ -109,3 +133,4 @@ def extract(self, watermarked_img, watermark_shape):
         wm_idx += 1
     
     return watermark * 255  # Convert to 0-255 range
+
