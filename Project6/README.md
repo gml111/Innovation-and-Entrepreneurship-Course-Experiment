@@ -23,40 +23,36 @@ Google Password Checkup 协议允许用户(P1)安全地检查其密码是否出�
    - P2 生成随机密钥
      $k_2 \in \mathbb{Z}_p^*$ 和 Paillier 密钥对 $(pk, sk)$
 
-1. **Round 1 (P1 → P2)**  
-   - For each $v_i \in V$, compute:  
-     $$ Q_i = H(v_i)^{k_1} $$  
-   - P1 sends $\left\\{ Q_i \right\\}_{i=1}^n$ **(randomly permuted)** to P2.
+2. **Round 1 (P1 → P2)**
+   - For each element $v_i \in V$:
+     $Q_i = H(v_i)^{\,k_1}$
+   - P1 sends randomly permuted set $\big\\{ Q_i \big\\}_{i=1}^n$ to P2.
 
----
 
-2. **Round 2 (P2 → P1)**  
-   - **Process received items:**  
-     For each $Q_i$:  
-     $$ Z_i = Q_i^{k_2} = H(v_i)^{k_1k_2} $$  
-     
-   - **Process own set $W$:**  
-     For each $(w_j, t_j) \in W$:  
-     $$ R_j = H(w_j)^{k_2}, \quad \text{enc}(t_j) = \text{Enc}_{pk}(t_j) $$  
-     
-   - P2 sends $Z = \left\\{ Z_i \right\\}$ and $\left\\{ (R_j, \text{enc}(t_j)) \right\\}$ **(randomly permuted)** to P1.
+3. **Round 2 (P2 → P1)**
+   - **Process received items:**
+     For each $Q_i$:
+     $Z_i = Q_i^{\,k_2} = H(v_i)^{\,k_1 k_2}$
+   - **Process own set $W$:**
+     For each element $(w_j, t_j) \in W$:
+     $R_j = H(w_j)^{\,k_2}, \quad \text{enc}(t_j) = \text{Enc}_{\,pk}(t_j)$
+   - P2 sends randomly permuted sets $Z = \big\\{ Z_i \big\\}$ and $\big\\{ (R_j, \text{enc}(t_j)) \big\\}$ to P1.
 
----
 
-3. **Round 3 (P1 → P2)**  
-   - For each received $(R_j, \text{enc}(t_j))$:  
-     $$ T_j = R_j^{k_1} = H(w_j)^{k_1k_2} $$  
-     If $T_j \in Z$, keep $\text{enc}(t_j)$.  
-     
-   - **Compute encrypted sum:**  
-     $$ C = \left( \prod_{\substack{j \in \text{intersection}}} \text{enc}(t_j) \right) \cdot \text{Enc}_{pk}(0) $$  
-     
+4. **Round 3 (P1 → P2)**
+   - For each received $(R_j, \text{enc}(t_j))$:
+     $T_j = R_j^{\,k_1} = H(w_j)^{\,k_1 k_2}$
+     If $T_j \in Z$, retain $\text{enc}(t_j)$
+   - **Compute encrypted sum:**
+     $C = \left( \,\prod_{j \in I} \text{enc}(t_j) \right) \cdot \text{Enc}_{pk}(0)$
+     *where $ I $ represents the intersection indices*
    - P1 sends $C$ to P2.
 
----
 
-4. **Result Decryption (P2)**  
-   $$ \text{sum} = \text{Dec}_{sk}(C) $$
+#### 4. **Result Decryption (P2)**
+   $$
+   \text{sum} = \text{Dec}_{\,sk}(C)
+   $$
 
 ### 1.3 安全属性
 - **隐私保护**：P1 不知道 $W$ 的具体内容，P2 不知道 $V$ 的具体内容
@@ -110,6 +106,6 @@ Google Password Checkup 协议允许用户(P1)安全地检查其密码是否出�
 
 ### 3.2 预期结果
 - **交集元素**：`id1`, `id2`, `id3`
-- **交集属性之和**：$10 + 20 + 30 = 60$
+- **交集属性之和**：10 + 20 + 30 = 60
 
 ### 3.3 实际输出
